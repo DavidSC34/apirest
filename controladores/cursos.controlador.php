@@ -150,27 +150,185 @@ class ControladorCursos
     /*editar cursos */
     public function show($id)
     {
-        $json = array(
-            "detalle" => "Mostrando el curso con  id  " . $id
-        );
+        /*Validar las credenciales del cliente*/
+        $clientes =  ModeloClientes::index("clientes");
+
+        if (isset($_SERVER['PHP_AUTH_USER']) &&  isset($_SERVER['PHP_AUTH_PW'])) {
+
+            foreach ($clientes as $key => $valueCliente) {
+                if (
+                    "Basic " . base64_encode($_SERVER['PHP_AUTH_USER'] . ":" . $_SERVER['PHP_AUTH_PW']) ==
+                    "Basic " . base64_encode($valueCliente["id_cliente"] . ":" . $valueCliente["llave_secreta"])
+                ) {
+                    /*Mosstrar todos los cursos */
+                    $curso = ModeloCursos::show("cursos", $id);
+                    if (!empty($curso)) {
+                        $json = array(
+                            "status" => 200,
+                            "detalle" => $curso
+                        );
+                        echo json_encode($json, true);
+                        return;
+                    } else {
+                        $json = array(
+                            "status" => 200,
+                            "total_registros" => 0,
+                            "detalle" => "No hay ningun curso registrado"
+                        );
+                        echo json_encode($json, true);
+                        return;
+                    }
+                } else {
+                    $json = array(
+                        "status" => 404,
+                        "detalle" => "El Token es invalido"
+                    );
+                }
+            }
+        } else {
+            $json = array(
+                "status" => 404,
+                "detalle" => "No esta autorizado para recibir los registros"
+            );
+        }
         echo json_encode($json, true);
         return;
     }
     /*editar cursos */
-    public function update($id)
+    public function update($id, $datos)
     {
-        $json = array(
-            "detalle" => "Curso editado con id  " . $id
-        );
+        /*Validar las credenciales del cliente*/
+        $clientes =  ModeloClientes::index("clientes");
+
+        if (isset($_SERVER['PHP_AUTH_USER']) &&  isset($_SERVER['PHP_AUTH_PW'])) {
+
+            foreach ($clientes as $key => $valueCliente) {
+                if (
+                    "Basic " . base64_encode($_SERVER['PHP_AUTH_USER'] . ":" . $_SERVER['PHP_AUTH_PW']) ==
+                    "Basic " . base64_encode($valueCliente["id_cliente"] . ":" . $valueCliente["llave_secreta"])
+                ) {
+                    /*Validacion datos */
+
+
+                    foreach ($datos as $key => $valueDatos) {
+
+                        if (isset($valueDatos) && !preg_match('/^[(\\)\\=\\&\\$\\;\\-\\_\\*\\"\\<\\>\\?\\¿\\!\\:\\,\\.\\0-9a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$/', $valueDatos)) {
+                            $json = array(
+                                "status" => 404,
+                                "detalle" => "Error en el campo nombre " . $key
+                            );
+                            echo json_encode($json, true);
+                            return;
+                        }
+                    }
+
+                    /* validar el id creador*/
+                    $curso = ModeloCursos::show("cursos", $id);
+                    foreach ($curso as $key => $valueCurso) {
+                        if ($valueCurso->id_creador == $valueCliente["id"]) {
+
+                            /*Llevar datos al modelo*/
+                            $datos = array(
+                                "id" => $id,
+                                "titulo" => $datos["titulo"],
+                                "descripcion" => $datos["descripcion"],
+                                "instructor" => $datos["instructor"],
+                                "imagen" => $datos["imagen"],
+                                "precio" => $datos["precio"],
+                                "updated_at" => date('Y-m-d h:i:s'),
+                            );
+
+                            $update  = ModeloCursos::update("cursos", $datos);
+
+                            /*Respuesta del modelo */
+                            if ($update == "ok") {
+                                $json = array(
+                                    "status" => 200,
+                                    "detalle" => "Registro exitoso, su curso ha sido actualizado"
+                                );
+                                echo json_encode($json, true);
+                                return;
+                            }
+                        } else {
+                            $json = array(
+                                "status" => 404,
+                                "detalle" => "No esta autorizado para modificar este curso"
+                            );
+                            echo json_encode($json, true);
+                            return;
+                        }
+                    }
+                } else {
+                    $json = array(
+                        "status" => 404,
+                        "detalle" => "El Token es invalido"
+                    );
+                }
+            }
+        } else {
+            $json = array(
+                "status" => 404,
+                "detalle" => "No esta autorizado para modificar cursos"
+            );
+        }
         echo json_encode($json, true);
         return;
     }
     /*borrar cursos */
     public function delete($id)
     {
-        $json = array(
-            "detalle" => "Curso eliminado con id  " . $id
-        );
+        /*Validar las credenciales del cliente*/
+        $clientes =  ModeloClientes::index("clientes");
+
+        if (isset($_SERVER['PHP_AUTH_USER']) &&  isset($_SERVER['PHP_AUTH_PW'])) {
+
+            foreach ($clientes as $key => $valueCliente) {
+                if (
+                    "Basic " . base64_encode($_SERVER['PHP_AUTH_USER'] . ":" . $_SERVER['PHP_AUTH_PW']) ==
+                    "Basic " . base64_encode($valueCliente["id_cliente"] . ":" . $valueCliente["llave_secreta"])
+                ) {
+
+
+                    /* validar el id creador*/
+                    $curso = ModeloCursos::show("cursos", $id);
+                    foreach ($curso as $key => $valueCurso) {
+                        if ($valueCurso->id_creador == $valueCliente["id"]) {
+
+
+
+                            $delete  = ModeloCursos::delete("cursos", $id);
+
+                            /*Respuesta del modelo */
+                            if ($delete == "ok") {
+                                $json = array(
+                                    "status" => 200,
+                                    "detalle" => "Se ha borrado su curso con exito"
+                                );
+                                echo json_encode($json, true);
+                                return;
+                            }
+                        } else {
+                            $json = array(
+                                "status" => 404,
+                                "detalle" => "No esta autorizado para borrar este curso"
+                            );
+                            echo json_encode($json, true);
+                            return;
+                        }
+                    }
+                } else {
+                    $json = array(
+                        "status" => 404,
+                        "detalle" => "El Token es invalido"
+                    );
+                }
+            }
+        } else {
+            $json = array(
+                "status" => 404,
+                "detalle" => "No esta autorizado para modificar cursos"
+            );
+        }
         echo json_encode($json, true);
         return;
     }

@@ -78,8 +78,13 @@ if (count(array_filter($arrayRutas)) === 0) {
                 $curso->show(array_filter($arrayRutas)[2]);
             }
             /* PETICIONES PUT*/ elseif (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'PUT') {
+
+                /*Capturar datos */
+                $datos = array();
+                parse_str(file_get_contents('php://input'), $datos);
+
                 $editarCurso = new ControladorCursos();
-                $editarCurso->update(array_filter($arrayRutas)[2]);
+                $editarCurso->update(array_filter($arrayRutas)[2], $datos);
             }
 
             /* PETICIONES DELETE*/ elseif (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'DELETE') {
