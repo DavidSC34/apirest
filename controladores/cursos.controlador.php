@@ -17,7 +17,7 @@ class ControladorCursos
                     "Basic " . base64_encode($valueCliente["id_cliente"] . ":" . $valueCliente["llave_secreta"])
                 ) {
                     /*Mosstrar todos los cursos */
-                    $cursos = ModeloCursos::index("cursos");
+                    $cursos = ModeloCursos::index("cursos", "clientes");
                     if (!empty($cursos)) {
                         $json = array(
                             "status" => 200,
@@ -85,7 +85,7 @@ class ControladorCursos
 
 
                     /*Validacion que el titulo o la descripcion no esten repetidos */
-                    $cursos = ModeloCursos::index("cursos");
+                    $cursos = ModeloCursos::index("cursos", "clientes");
                     foreach ($cursos as $key => $value) {
                         if ($value->titulo == $datos["titulo"]) {
                             $json = array(
@@ -161,7 +161,7 @@ class ControladorCursos
                     "Basic " . base64_encode($valueCliente["id_cliente"] . ":" . $valueCliente["llave_secreta"])
                 ) {
                     /*Mosstrar todos los cursos */
-                    $curso = ModeloCursos::show("cursos", $id);
+                    $curso = ModeloCursos::show("cursos", "clientes", $id);
                     if (!empty($curso)) {
                         $json = array(
                             "status" => 200,
@@ -223,7 +223,7 @@ class ControladorCursos
                     }
 
                     /* validar el id creador*/
-                    $curso = ModeloCursos::show("cursos", $id);
+                    $curso = ModeloCursos::show("cursos", "clientes", $id);
                     foreach ($curso as $key => $valueCurso) {
                         if ($valueCurso->id_creador == $valueCliente["id"]) {
 
@@ -290,7 +290,7 @@ class ControladorCursos
 
 
                     /* validar el id creador*/
-                    $curso = ModeloCursos::show("cursos", $id);
+                    $curso = ModeloCursos::show("cursos", "clientes", $id);
                     foreach ($curso as $key => $valueCurso) {
                         if ($valueCurso->id_creador == $valueCliente["id"]) {
 

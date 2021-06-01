@@ -4,16 +4,18 @@ require_once 'conexion.php';
 class ModeloCursos
 {
     /*Mostrar todos los cursos */
-    static public function index($tabla)
+    static public function index($tabla1, $tabla2)
     {
-        $stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla");
+        // $stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla");
+        $stmt = Conexion::conectar()->prepare(" SELECT $tabla1.id, $tabla1.titulo, $tabla1.descripcion, $tabla1.instructor, $tabla1.imagen, $tabla1.precio, $tabla1.id_creador, $tabla2.nombre,$tabla2.apellido  FROM $tabla1 INNER JOIN $tabla2 ON $tabla1.id_creador = $tabla2.id");
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_CLASS);
     }
     /*Mostrar un solo curso */
-    static public function show($tabla, $id)
+    static public function show($tabla1, $tabla2, $id)
     {
-        $stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla WHERE id=:id");
+        // $stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla WHERE id=:id");
+        $stmt = Conexion::conectar()->prepare("SELECT $tabla1.id, $tabla1.titulo, $tabla1.descripcion, $tabla1.instructor, $tabla1.imagen, $tabla1.precio, $tabla1.id_creador, $tabla2.nombre,$tabla2.apellido  FROM $tabla1 INNER JOIN $tabla2 ON $tabla1.id_creador = $tabla2.id WHERE $tabla1.id=:id");
         $stmt->bindParam(":id", $id, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_CLASS);
