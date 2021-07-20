@@ -28,9 +28,30 @@ class ModeloCarteleras
     }
     static public function create($tabla, $datos)
     {
-        echo "<pre>";
-        print_r($datos);
-        echo "</pre>";
-        return;
+        // echo "<pre>";
+        // print_r($datos);
+        // echo "</pre>";
+        // return;
+        $stmt = Conexion::conectar()->prepare("INSERT INTO $tabla (date, country, city, state, commission, promoter, place, uid, status, created_at, updated_at) VALUES (:date, :country, :city, :state, :commission, :promoter, :place, :uid, :status, :created_at, :updated_at)");
+
+        $stmt->bindParam(":date", $datos["date"], PDO::PARAM_STR);
+        $stmt->bindParam(":country", $datos["country"], PDO::PARAM_STR);
+        $stmt->bindParam(":city", $datos["city"], PDO::PARAM_STR);
+        $stmt->bindParam(":state", $datos["state"], PDO::PARAM_STR);
+        $stmt->bindParam(":commission", $datos["commission"], PDO::PARAM_STR);
+        $stmt->bindParam(":promoter", $datos["promoter"], PDO::PARAM_STR);
+        $stmt->bindParam(":place", $datos["place"], PDO::PARAM_STR);
+        $stmt->bindParam(":uid", $datos["uid"], PDO::PARAM_STR);
+        $stmt->bindParam(":status", $datos["status"], PDO::PARAM_STR);
+        $stmt->bindParam(":created_at", $datos["created_at"], PDO::PARAM_STR);
+        $stmt->bindParam(":updated_at", $datos["updated_at"], PDO::PARAM_STR);
+
+        if ($stmt->execute()) {
+            return "ok";
+        } else {
+            print_r(Conexion::conectar()->errorInfo());
+        }
+
+        $stmt = null;
     }
 }

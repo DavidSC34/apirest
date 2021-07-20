@@ -74,6 +74,23 @@ if (isset($_GET["page"]) && is_numeric($_GET["page"])) {
                 if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'GET') {
                     $carteleras = new ControladorCarteleras();
                     $carteleras->index(null);
+                } elseif (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
+
+                    $datos = array(
+                        "date" => $_POST["date"],
+                        "country" => $_POST["country"],
+                        "city" => $_POST["city"],
+                        "state" => $_POST["state"],
+                        "commission" => $_POST["commission"],
+                        "promoter" => $_POST["promoter"],
+                        "place" => $_POST["place"],
+                        "uid" => $_POST["uid"],
+                        "status" => 1,
+                    );
+
+
+                    $crearCartelera = new ControladorCarteleras();
+                    $crearCartelera->create($datos);
                 }
             } else {
                 $json = array(

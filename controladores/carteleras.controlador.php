@@ -56,4 +56,46 @@ class ControladorCarteleras
             return;
         }
     }
+
+    public function create($datos)
+    {
+        /*Validacion datos */
+        foreach ($datos as $key => $valueDatos) {
+
+            if (isset($valueDatos) && !preg_match('/^[(\\)\\=\\&\\$\\;\\-\\_\\*\\"\\<\\>\\?\\¿\\!\\:\\,\\.\\0-9a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$/', $valueDatos)) {
+                $json = array(
+                    "status" => 404,
+                    "detalle" => "Error en el campo nombre " . $key
+                );
+                echo json_encode($json, true);
+                return;
+            }
+        }
+        /*Llevar datos al modelo*/
+        $datos = array(
+            "date" => $datos["date"],
+            "country" => $datos["country"],
+            "city" => $datos["city"],
+            "state" => $datos["state"],
+            "commission" => $datos["commission"],
+            "promoter" => $datos["promoter"],
+            "place" => $datos["place"],
+            "uid" => $datos["uid"],
+            "status" => 1,
+            "created_at" => date('Y-m-d h:i:s'),
+            "updated_at" => date('Y-m-d h:i:s'),
+        );
+
+        $create  = ModeloCarteleras::create("cartelera", $datos);
+
+        /*Respuesta del modelo */
+        if ($create == "ok") {
+            $json = array(
+                "status" => 200,
+                "detalle" => "Registro exitoso, su cartelera ha sido guardado"
+            );
+            echo json_encode($json, true);
+            return;
+        }
+    }
 }
