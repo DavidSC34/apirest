@@ -4,7 +4,7 @@ class ControladorCursos
 
     /*Mostrar todos los registros */
 
-    public function index()
+    public function index($page)
     {
         /*Validar las credenciales del cliente*/
         $clientes =  ModeloClientes::index("clientes");
@@ -16,8 +16,17 @@ class ControladorCursos
                     "Basic " . base64_encode($_SERVER['PHP_AUTH_USER'] . ":" . $_SERVER['PHP_AUTH_PW']) ==
                     "Basic " . base64_encode($valueCliente["id_cliente"] . ":" . $valueCliente["llave_secreta"])
                 ) {
-                    /*Mosstrar todos los cursos */
-                    $cursos = ModeloCursos::index("cursos", "clientes");
+
+                    if ($page != null) {
+                        /*Mostrar cursos con paginacion */
+                        $cantidad = 10;
+                        $desde = ($page - 1) * $cantidad;
+                        $cursos = ModeloCursos::index("cursos", "clientes", $cantidad, $desde);
+                    } else {
+
+                        /*Mosstrar todos los cursos */
+                        $cursos = ModeloCursos::index("cursos", "clientes", null, null);
+                    }
                     if (!empty($cursos)) {
                         $json = array(
                             "status" => 200,
@@ -85,7 +94,7 @@ class ControladorCursos
 
 
                     /*Validacion que el titulo o la descripcion no esten repetidos */
-                    $cursos = ModeloCursos::index("cursos", "clientes");
+                    $cursos = ModeloCursos::index("cursos", "clientes", null, null);
                     foreach ($cursos as $key => $value) {
                         if ($value->titulo == $datos["titulo"]) {
                             $json = array(
