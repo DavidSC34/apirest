@@ -98,4 +98,61 @@ class ControladorCarteleras
             return;
         }
     }
+
+    public function update($id,$datos){
+
+        /*Validacion datos */
+        foreach ($datos as $key => $valueDatos) {
+
+            if (isset($valueDatos) && !preg_match('/^[(\\)\\=\\&\\$\\;\\-\\_\\*\\"\\<\\>\\?\\¿\\!\\:\\,\\.\\0-9a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$/', $valueDatos)) {
+                $json = array(
+                    "status" => 404,
+                    "detalle" => "Error en el campo nombre " . $key
+                );
+                echo json_encode($json, true);
+                return;
+            }
+        }
+
+         /* validar el id creador*/
+         $cartelera  = ModeloCarteleras::show("cartelera", $id);
+
+         foreach ($cartelera as $key => $valueCartelera) {
+             if($valueCartelera->uid == $datos['uid']){
+                    /*Llevar datos al modelo*/
+                    $datos = array(
+                        "id" => $id,
+                        "date" => $datos["titulo"],
+                        "country" => $datos["descripcion"],
+                        "city" => $datos["instructor"],
+                        "state" => $datos["imagen"],
+                        "commission" => $datos["precio"],
+                        "promoter" => $datos["precio"],                        
+                        "place" => $datos["precio"],
+                        "uid" => $datos["precio"],
+                        "status" => $datos["status"],                       
+                        "updated_at" => date('Y-m-d h:i:s'),
+                    );
+
+                    $update  = ModeloCarteleras::update("cartelera", $datos);
+
+                            /*Respuesta del modelo */
+                            if ($update == "ok") {
+                                $json = array(
+                                    "status" => 200,
+                                    "detalle" => "Registro exitoso, su cartelera ha sido actualizado"
+                                );
+                                echo json_encode($json, true);
+                                return;
+                            }
+             }else{
+                $json = array(
+                    "status" => 404,
+                    "detalle" => "No esta autorizado para modificar este cartelera"
+                );
+                echo json_encode($json, true);
+                return;
+             }
+         }
+    }
 }

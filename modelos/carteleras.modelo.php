@@ -17,11 +17,11 @@ class ModeloCarteleras
         return $stmt->fetchAll(PDO::FETCH_CLASS);
     }
 
-    /*Mostrar una solo cartelera */
+    /*Mostrar una sola cartelera */
     static public function show($tabla1, $id)
     {
         // $stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla WHERE id=:id");
-        $stmt = Conexion::conectar()->prepare(" SELECT $tabla1.id_cartelera,$tabla1.date, $tabla1.country, $tabla1.city,$tabla1.state, $tabla1.commission, $tabla1.promoter, $tabla1.place, $tabla1.uid, $tabla1.status  FROM $tabla1  WHERE $tabla1.id_cartelera=:id");
+        $stmt = Conexion::conectar()->prepare(" SELECT $tabla1.id_cartelera,$tabla1.date, $tabla1.country, $tabla1.city,$tabla1.state, $tabla1.commission, $tabla1.promoter, $tabla1.place, $tabla1.uid, $tabla1.status  FROM $tabla1  WHERE $tabla1.id_cartelera=:id ");
         $stmt->bindParam(":id", $id, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_CLASS);
@@ -44,6 +44,35 @@ class ModeloCarteleras
         $stmt->bindParam(":uid", $datos["uid"], PDO::PARAM_STR);
         $stmt->bindParam(":status", $datos["status"], PDO::PARAM_STR);
         $stmt->bindParam(":created_at", $datos["created_at"], PDO::PARAM_STR);
+        $stmt->bindParam(":updated_at", $datos["updated_at"], PDO::PARAM_STR);
+
+        if ($stmt->execute()) {
+            return "ok";
+        } else {
+            print_r(Conexion::conectar()->errorInfo());
+        }
+
+        $stmt = null;
+    }
+
+    static public function update($tabla, $datos)
+    {
+        // echo "<pre>";
+        // print_r($datos);
+        // echo "</pre>";
+        // return;
+        $stmt = Conexion::conectar()->prepare(" UPDATE $tabla SET date=:date,country=:country,city=:city,state=:state,commission=:commission,promoter=:promoter,place=:place,uid=:uid,status=:status,updated_at=:updated_at  WHERE id= :id ");
+
+        $stmt->bindParam(":id", $datos["id_cartelera"], PDO::PARAM_INT);
+        $stmt->bindParam(":date", $datos["date"], PDO::PARAM_STR);
+        $stmt->bindParam(":country", $datos["country"], PDO::PARAM_STR);
+        $stmt->bindParam(":city", $datos["city"], PDO::PARAM_STR);
+        $stmt->bindParam(":state", $datos["state"], PDO::PARAM_STR);
+        $stmt->bindParam(":commission", $datos["commission"], PDO::PARAM_STR);
+        $stmt->bindParam(":promoter", $datos["promoter"], PDO::PARAM_STR);
+        $stmt->bindParam(":place", $datos["place"], PDO::PARAM_STR);
+        $stmt->bindParam(":uid", $datos["uid"], PDO::PARAM_STR);
+        $stmt->bindParam(":status", $datos["status"], PDO::PARAM_STR);
         $stmt->bindParam(":updated_at", $datos["updated_at"], PDO::PARAM_STR);
 
         if ($stmt->execute()) {
