@@ -99,7 +99,8 @@ class ControladorCarteleras
         }
     }
 
-    public function update($id,$datos){
+    public function update($id, $datos)
+    {
 
         /*Validacion datos */
         foreach ($datos as $key => $valueDatos) {
@@ -114,45 +115,83 @@ class ControladorCarteleras
             }
         }
 
-         /* validar el id creador*/
-         $cartelera  = ModeloCarteleras::show("cartelera", $id);
+        /* validar el id creador*/
+        $cartelera  = ModeloCarteleras::show("cartelera", $id);
 
-         foreach ($cartelera as $key => $valueCartelera) {
-             if($valueCartelera->uid == $datos['uid']){
-                    /*Llevar datos al modelo*/
-                    $datos = array(
-                        "id" => $id,
-                        "date" => $datos["titulo"],
-                        "country" => $datos["descripcion"],
-                        "city" => $datos["instructor"],
-                        "state" => $datos["imagen"],
-                        "commission" => $datos["precio"],
-                        "promoter" => $datos["precio"],                        
-                        "place" => $datos["precio"],
-                        "uid" => $datos["precio"],
-                        "status" => $datos["status"],                       
-                        "updated_at" => date('Y-m-d h:i:s'),
+        foreach ($cartelera as $key => $valueCartelera) {
+            if ($valueCartelera->uid == $datos['uid']) {
+                /*Llevar datos al modelo*/
+                $datos = array(
+                    "id" => $id,
+                    "date" => $datos["date"],
+                    "country" => $datos["country"],
+                    "city" => $datos["city"],
+                    "state" => $datos["state"],
+                    "commission" => $datos["commission"],
+                    "promoter" => $datos["promoter"],
+                    "place" => $datos["place"],
+                    "uid" => $datos["uid"],
+                    "status" => $datos["status"],
+                    "updated_at" => date('Y-m-d h:i:s'),
+                );
+
+                $update  = ModeloCarteleras::update("cartelera", $datos);
+
+                /*Respuesta del modelo */
+                if ($update == "ok") {
+                    $json = array(
+                        "status" => 200,
+                        "detalle" => "Registro exitoso, su cartelera ha sido actualizado"
                     );
-
-                    $update  = ModeloCarteleras::update("cartelera", $datos);
-
-                            /*Respuesta del modelo */
-                            if ($update == "ok") {
-                                $json = array(
-                                    "status" => 200,
-                                    "detalle" => "Registro exitoso, su cartelera ha sido actualizado"
-                                );
-                                echo json_encode($json, true);
-                                return;
-                            }
-             }else{
+                    echo json_encode($json, true);
+                    return;
+                }
+            } else {
                 $json = array(
                     "status" => 404,
                     "detalle" => "No esta autorizado para modificar este cartelera"
                 );
                 echo json_encode($json, true);
                 return;
-             }
-         }
+            }
+        }
+    }
+
+    public function delete($id, $datos)
+    {
+
+
+        /* validar el id creador*/
+        $cartelera  = ModeloCarteleras::show("cartelera", $id);
+
+        foreach ($cartelera as $key => $valueCartelera) {
+
+            if ($valueCartelera->uid == $datos['uid']) {
+                /*Llevar datos al modelo*/
+                $datos = array(
+                    "id" => $id,
+                    "updated_at" => date('Y-m-d h:i:s'),
+                );
+
+                $delete  = ModeloCarteleras::delete("cartelera", $datos);
+
+                /*Respuesta del modelo */
+                if ($delete == "ok") {
+                    $json = array(
+                        "status" => 200,
+                        "detalle" => "Cartelera eliminada exitosamente"
+                    );
+                    echo json_encode($json, true);
+                    return;
+                }
+            } else {
+                $json = array(
+                    "status" => 404,
+                    "detalle" => "No esta autorizado para modificar esta cartelera"
+                );
+                echo json_encode($json, true);
+                return;
+            }
+        }
     }
 }

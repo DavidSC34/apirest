@@ -20,12 +20,12 @@ if (isset($_GET["page"]) && is_numeric($_GET["page"])) {
 
         if (count(array_filter($arrayRutas)) === 1) {
 
-           
+
 
             /*cuando se hacen peticiones de registros*/
             if (array_filter($arrayRutas)[1] == "registro") {
 
-               
+
                 if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
                     //Capturar datos 
                     $datos = array(
@@ -76,7 +76,7 @@ if (isset($_GET["page"]) && is_numeric($_GET["page"])) {
                 /*checar el tipo de peticion http */
                 /* PETICIONES GET*/
                 if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'GET') {
-                    
+
 
                     $carteleras = new ControladorCarteleras();
                     $carteleras->index(null);
@@ -135,29 +135,34 @@ if (isset($_GET["page"]) && is_numeric($_GET["page"])) {
                     return;
                 }
             } elseif (array_filter($arrayRutas)[1] == "carteleras" && is_numeric(array_filter($arrayRutas)[2])) {
-                        /* PETICIONES GET*/
-                        if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'GET') {
-                            $cartelera = new ControladorCarteleras();
-                            $cartelera->show(array_filter($arrayRutas)[2]);
-                        }elseif(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'PUT'){
-                           /*Capturar datos */
-                                $datos = array();
-                                parse_str(file_get_contents('php://input'), $datos);
+                /* PETICIONES GET*/
+                if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'GET') {
+                    $cartelera = new ControladorCarteleras();
+                    $cartelera->show(array_filter($arrayRutas)[2]);
+                } elseif (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'PUT') {
+                    /*Capturar datos */
+                    $datos = array();
+                    parse_str(file_get_contents('php://input'), $datos);
 
-                                $editarCartelera = new ControladorCarteleras();
-                                $editarCartelera->update(array_filter($arrayRutas)[2], $datos);
+                    $editarCartelera = new ControladorCarteleras();
+                    $editarCartelera->update(array_filter($arrayRutas)[2], $datos);
+                } elseif (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'DELETE') {
+                    /*Capturar datos */
+                    $datos = array();
+                    parse_str(file_get_contents('php://input'), $datos);
 
-                        }elseif(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'DELETE'){
 
-                        }else {
-                            /*Metodo no encontrado */
-                            $json = array(
-                                "detalle" => "no encontrado"
-                            );
-                            echo json_encode($json, true);
-                            return;
-                        }
 
+                    $borrarCartelera = new ControladorCarteleras();
+                    $borrarCartelera->delete(array_filter($arrayRutas)[2], $datos);
+                } else {
+                    /*Metodo no encontrado */
+                    $json = array(
+                        "detalle" => "no encontrado"
+                    );
+                    echo json_encode($json, true);
+                    return;
+                }
             } else {
                 /*Metodo si no pide cursos y no es un numero  */
                 $json = array(

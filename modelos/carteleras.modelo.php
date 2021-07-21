@@ -61,9 +61,9 @@ class ModeloCarteleras
         // print_r($datos);
         // echo "</pre>";
         // return;
-        $stmt = Conexion::conectar()->prepare(" UPDATE $tabla SET date=:date,country=:country,city=:city,state=:state,commission=:commission,promoter=:promoter,place=:place,uid=:uid,status=:status,updated_at=:updated_at  WHERE id= :id ");
+        $stmt = Conexion::conectar()->prepare(" UPDATE $tabla SET date=:date,country=:country,city=:city,state=:state,commission=:commission,promoter=:promoter,place=:place,status=:status,updated_at=:updated_at  WHERE $tabla.id_cartelera = :id ");
 
-        $stmt->bindParam(":id", $datos["id_cartelera"], PDO::PARAM_INT);
+        $stmt->bindParam(":id", $datos["id"], PDO::PARAM_INT);
         $stmt->bindParam(":date", $datos["date"], PDO::PARAM_STR);
         $stmt->bindParam(":country", $datos["country"], PDO::PARAM_STR);
         $stmt->bindParam(":city", $datos["city"], PDO::PARAM_STR);
@@ -71,9 +71,25 @@ class ModeloCarteleras
         $stmt->bindParam(":commission", $datos["commission"], PDO::PARAM_STR);
         $stmt->bindParam(":promoter", $datos["promoter"], PDO::PARAM_STR);
         $stmt->bindParam(":place", $datos["place"], PDO::PARAM_STR);
-        $stmt->bindParam(":uid", $datos["uid"], PDO::PARAM_STR);
         $stmt->bindParam(":status", $datos["status"], PDO::PARAM_STR);
         $stmt->bindParam(":updated_at", $datos["updated_at"], PDO::PARAM_STR);
+
+        if ($stmt->execute()) {
+            return "ok";
+        } else {
+            print_r(Conexion::conectar()->errorInfo());
+        }
+
+        $stmt = null;
+    }
+
+    static public function delete($tabla, $datos)
+    {
+
+        $stmt = Conexion::conectar()->prepare(" UPDATE $tabla SET status=0,updated_at=:updated_at  WHERE $tabla.id_cartelera = :id ");
+
+        $stmt->bindParam(":id", $datos['id'], PDO::PARAM_INT);
+        $stmt->bindParam(":updated_at", $datos['updated_at'], PDO::PARAM_STR);
 
         if ($stmt->execute()) {
             return "ok";
