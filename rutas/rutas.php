@@ -103,10 +103,28 @@ if (isset($_GET["page"]) && is_numeric($_GET["page"])) {
                 /*checar el tipo de peticion http */
                 /* PETICIONES GET*/
                 if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'GET') {
-
-
                     $peleas = new ControladorPeleas();
                     $peleas->index(null);
+                }
+                 /* PETICIONES POST*/
+                if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'POST'){
+                        $datos=array(
+                            "id_cartelera" =>$_POST['id_cartelera'],
+                            "champion" => $_POST['id_cartelera'],
+                            "country_champion" => $_POST['country_champion'],
+                            "result" => $_POST['result'],
+                            "challenger" => $_POST['challenger'],
+                            "country_challenger" => $_POST['country_challenger'],
+                            "gender" => $_POST['gender'],
+                            "organismo" => $_POST['organismo'],
+                            "division" => $_POST['division'],
+                            "title" => $_POST['title'],
+                            "rounds" => $_POST['rounds'],
+
+                        );
+
+                        $crearPelea = new ControladorPeleas();
+                        $crearPelea->create($datos);
                 }
             } else {
                 $json = array(
@@ -173,7 +191,17 @@ if (isset($_GET["page"]) && is_numeric($_GET["page"])) {
                     echo json_encode($json, true);
                     return;
                 }
-            } else {
+            }elseif (array_filter($arrayRutas)[1] == "peleas" && is_numeric(array_filter($arrayRutas)[2])){
+
+                /* PETICIONES GET*/
+                if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'GET') {
+                    $pelea = new ControladorPeleas();
+                    $pelea->show(array_filter($arrayRutas)[2]);
+                }
+                /**PETICIONES PUT */
+                /**PETICIONES DELETE */
+            } 
+            else {
                 /*Metodo si no pide cursos y no es un numero  */
                 $json = array(
                     "detalle" => "no encontrado"
