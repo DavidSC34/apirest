@@ -7,10 +7,10 @@ class ModeloCarteleras
     static public function index($tabla1, $cantidad, $desde)
     {
         if ($cantidad != null && $desde != null) {
-            $stmt = Conexion::conectar()->prepare(" SELECT $tabla1.id_cartelera,$tabla1.date, $tabla1.country, $tabla1.city,$tabla1.state, $tabla1.commission, $tabla1.promoter, $tabla1.place, $tabla1.uid, $tabla1.status FROM $tabla1 WHERE $tabla1.status = 1  LIMIT $desde, $cantidad ");
+            $stmt = Conexion::conectar()->prepare(" SELECT $tabla1.id_cartelera,$tabla1.date, $tabla1.country, $tabla1.city,$tabla1.state, $tabla1.commission, $tabla1.promoter, $tabla1.place, $tabla1.uid, $tabla1.status, $tabla1.created_at, $tabla1.updated_at FROM $tabla1 WHERE $tabla1.status = 1  LIMIT $desde, $cantidad ");
         } else {
 
-            $stmt = Conexion::conectar()->prepare(" SELECT $tabla1.id_cartelera,$tabla1.date, $tabla1.country, $tabla1.city,$tabla1.state, $tabla1.commission, $tabla1.promoter, $tabla1.place, $tabla1.uid, $tabla1.status   FROM $tabla1 WHERE $tabla1.status = 1");
+            $stmt = Conexion::conectar()->prepare(" SELECT $tabla1.id_cartelera,$tabla1.date, $tabla1.country, $tabla1.city,$tabla1.state, $tabla1.commission, $tabla1.promoter, $tabla1.place, $tabla1.uid, $tabla1.status,$tabla1.created_at, $tabla1.updated_at   FROM $tabla1 WHERE $tabla1.status = 1");
         }
         // $stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla");
         $stmt->execute();
@@ -21,7 +21,7 @@ class ModeloCarteleras
     static public function show($tabla1, $id)
     {
         // $stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla WHERE id=:id");
-        $stmt = Conexion::conectar()->prepare(" SELECT $tabla1.id_cartelera,$tabla1.date, $tabla1.country, $tabla1.city,$tabla1.state, $tabla1.commission, $tabla1.promoter, $tabla1.place, $tabla1.uid, $tabla1.status  FROM $tabla1  WHERE $tabla1.id_cartelera=:id ");
+        $stmt = Conexion::conectar()->prepare(" SELECT $tabla1.id_cartelera,$tabla1.date, $tabla1.country, $tabla1.city,$tabla1.state, $tabla1.commission, $tabla1.promoter, $tabla1.place, $tabla1.uid, $tabla1.status,$tabla1.created_at, $tabla1.updated_at  FROM $tabla1  WHERE $tabla1.id_cartelera=:id  AND $tabla1.status = 1");
         $stmt->bindParam(":id", $id, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_CLASS);

@@ -98,6 +98,16 @@ if (isset($_GET["page"]) && is_numeric($_GET["page"])) {
                     $crearCartelera = new ControladorCarteleras();
                     $crearCartelera->create($datos);
                 }
+            } elseif (array_filter($arrayRutas)[1] == "peleas") {
+
+                /*checar el tipo de peticion http */
+                /* PETICIONES GET*/
+                if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'GET') {
+
+
+                    $peleas = new ControladorPeleas();
+                    $peleas->index(null);
+                }
             } else {
                 $json = array(
                     "detalle" => "no encontrado en peticiones"
