@@ -106,25 +106,26 @@ if (isset($_GET["page"]) && is_numeric($_GET["page"])) {
                     $peleas = new ControladorPeleas();
                     $peleas->index(null);
                 }
-                 /* PETICIONES POST*/
-                if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'POST'){
-                        $datos=array(
-                            "id_cartelera" =>$_POST['id_cartelera'],
-                            "champion" => $_POST['id_cartelera'],
-                            "country_champion" => $_POST['country_champion'],
-                            "result" => $_POST['result'],
-                            "challenger" => $_POST['challenger'],
-                            "country_challenger" => $_POST['country_challenger'],
-                            "gender" => $_POST['gender'],
-                            "organismo" => $_POST['organismo'],
-                            "division" => $_POST['division'],
-                            "title" => $_POST['title'],
-                            "rounds" => $_POST['rounds'],
+                /* PETICIONES POST*/
+                if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
+                    $datos = array(
+                        "id_cartelera" => $_POST['id_cartelera'],
+                        "champion" => $_POST['champion'],
+                        "country_champion" => $_POST['country_champion'],
+                        "result" => $_POST['result'],
+                        "challenger" => $_POST['challenger'],
+                        "country_challenger" => $_POST['country_challenger'],
+                        "gender" => $_POST['gender'],
+                        "organismo" => $_POST['organismo'],
+                        "division" => $_POST['division'],
+                        "title" => $_POST['title'],
+                        "rounds" => $_POST['rounds'],
+                        "uid" => $_POST['uid'],
 
-                        );
+                    );
 
-                        $crearPelea = new ControladorPeleas();
-                        $crearPelea->create($datos);
+                    $crearPelea = new ControladorPeleas();
+                    $crearPelea->create($datos);
                 }
             } else {
                 $json = array(
@@ -191,7 +192,7 @@ if (isset($_GET["page"]) && is_numeric($_GET["page"])) {
                     echo json_encode($json, true);
                     return;
                 }
-            }elseif (array_filter($arrayRutas)[1] == "peleas" && is_numeric(array_filter($arrayRutas)[2])){
+            } elseif (array_filter($arrayRutas)[1] == "peleas" && is_numeric(array_filter($arrayRutas)[2])) {
 
                 /* PETICIONES GET*/
                 if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'GET') {
@@ -200,8 +201,7 @@ if (isset($_GET["page"]) && is_numeric($_GET["page"])) {
                 }
                 /**PETICIONES PUT */
                 /**PETICIONES DELETE */
-            } 
-            else {
+            } else {
                 /*Metodo si no pide cursos y no es un numero  */
                 $json = array(
                     "detalle" => "no encontrado"

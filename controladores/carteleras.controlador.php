@@ -141,7 +141,7 @@ class ControladorCarteleras
                 if ($update == "ok") {
                     $json = array(
                         "status" => 200,
-                        "detalle" => "Registro exitoso, su cartelera ha sido actualizado"
+                        "detalle" => "Registro exitoso, su cartelera ha sido actualizada"
                     );
                     echo json_encode($json, true);
                     return;
@@ -149,7 +149,7 @@ class ControladorCarteleras
             } else {
                 $json = array(
                     "status" => 404,
-                    "detalle" => "No esta autorizado para modificar este cartelera"
+                    "detalle" => "No esta autorizado para modificar esta cartelera"
                 );
                 echo json_encode($json, true);
                 return;

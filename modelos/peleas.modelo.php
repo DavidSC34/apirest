@@ -1,23 +1,59 @@
 <?php
 require_once 'conexion.php';
 
-class ModeloPeleas{
-    static public function index($tabla, $cantidad, $desde){
+class ModeloPeleas
+{
+    static public function index($tabla, $cantidad, $desde)
+    {
         if ($cantidad != null && $desde != null) {
-            $stmt = Conexion::conectar()->prepare("SELECT $tabla.id, $tabla.id_cartelera, $tabla.champion, $tabla.country_champion, $tabla.result, $tabla.challenger, $tabla.country_challenger, $tabla.gender, $tabla.organismo, $tabla.division, $tabla.title, $tabla.rounds FROM $tabla LIMIT $desde, $cantidad ");
-        }else{
-            $stmt = Conexion::conectar()->prepare("SELECT $tabla.id, $tabla.id_cartelera, $tabla.champion, $tabla.country_champion, $tabla.result, $tabla.challenger, $tabla.country_challenger, $tabla.gender, $tabla.organismo, $tabla.division, $tabla.title, $tabla.rounds FROM $tabla ");
+            $stmt = Conexion::conectar()->prepare("SELECT $tabla.id, $tabla.id_cartelera, $tabla.champion, $tabla.country_champion, $tabla.result, $tabla.challenger, $tabla.country_challenger, $tabla.gender, $tabla.organismo, $tabla.division, $tabla.title, $tabla.rounds, $tabla.status FROM $tabla LIMIT $desde, $cantidad ");
+        } else {
+            $stmt = Conexion::conectar()->prepare("SELECT $tabla.id, $tabla.id_cartelera, $tabla.champion, $tabla.country_champion, $tabla.result, $tabla.challenger, $tabla.country_challenger, $tabla.gender, $tabla.organismo, $tabla.division, $tabla.title, $tabla.rounds, $tabla.status FROM $tabla ");
         }
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_CLASS);
-
     }
 
-    static public function show($tabla, $id){
+    static public function show($tabla, $id)
+    {
 
-        $stmt = Conexion::conectar()->prepare("SELECT $tabla.id, $tabla.id_cartelera, $tabla.champion, $tabla.country_champion, $tabla.result, $tabla.challenger, $tabla.country_challenger, $tabla.gender, $tabla.organismo, $tabla.division, $tabla.title, $tabla.rounds FROM $tabla  WHERE id= :id");
+        $stmt = Conexion::conectar()->prepare("SELECT $tabla.id, $tabla.id_cartelera, $tabla.champion, $tabla.country_champion, $tabla.result, $tabla.challenger, $tabla.country_challenger, $tabla.gender, $tabla.organismo, $tabla.division, $tabla.title, $tabla.rounds, $tabla.status, $tabla.uid, $tabla.created_at, $tabla.updated_at FROM $tabla  WHERE id= :id");
         $stmt->bindParam(":id", $id, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_CLASS);
+    }
+
+    static public function create($tabla, $datos)
+    {
+
+        $stmt = Conexion::conectar()->prepare("INSERT INTO $tabla (id_cartelera, champion, country_champion, result, challenger, country_challenger, gender, organismo, division, title, rounds, uid, status, created_at, updated_at) VALUES (:id_cartelera, :champion, :country_champion, :result, :challenger, :country_challenger, :gender, :organismo, :division, :title, :rounds, :uid, :status, :created_at, :updated_at)");
+
+        $stmt->bindParam(":id_cartelera", $datos['id_cartelera'], PDO::PARAM_INT);
+        $stmt->bindParam(":champion", $datos['champion'], PDO::PARAM_STR);
+        $stmt->bindParam(":country_champion", $datos['country_champion'], PDO::PARAM_STR);
+        $stmt->bindParam(":result", $datos['result'], PDO::PARAM_STR);
+        $stmt->bindParam(":challenger", $datos['challenger'], PDO::PARAM_STR);
+        $stmt->bindParam(":country_challenger", $datos['country_challenger'], PDO::PARAM_STR);
+        $stmt->bindParam(":gender", $datos['gender'], PDO::PARAM_STR);
+        $stmt->bindParam(":organismo", $datos['organismo'], PDO::PARAM_STR);
+        $stmt->bindParam(":division", $datos['division'], PDO::PARAM_STR);
+        $stmt->bindParam(":title", $datos['title'], PDO::PARAM_STR);
+        $stmt->bindParam(":rounds", $datos['rounds'], PDO::PARAM_INT);
+        $stmt->bindParam(":uid", $datos['uid'], PDO::PARAM_STR);
+        $stmt->bindParam(":status", $datos['status'], PDO::PARAM_INT);
+        $stmt->bindParam(":created_at", $datos['created_at'], PDO::PARAM_STR);
+        $stmt->bindParam(":updated_at", $datos['updated_at'], PDO::PARAM_STR);
+
+        if ($stmt->execute()) {
+            return "ok";
+        } else {
+            print_r(Conexion::conectar()->errorInfo());
+        }
+
+        $stmt = null;
+    }
+
+    static public function update($tabla, $datos)
+    {
     }
 }
