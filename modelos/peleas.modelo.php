@@ -55,5 +55,30 @@ class ModeloPeleas
 
     static public function update($tabla, $datos)
     {
+
+
+        $stmt = Conexion::conectar()->prepare("UPDATE $tabla SET id_cartelera=:id_cartelera,champion=:champion,country_champion=:country_champion,result=:result,challenger=:challenger,country_challenger=:country_challenger,gender=:gender,organismo=:organismo,division=:division,title=:title,rounds=:rounds,updated_at=:updated_at WHERE id=:id");
+
+        $stmt->bindParam(":id", $datos['id'], PDO::PARAM_INT);
+        $stmt->bindParam(":id_cartelera", $datos['id_cartelera'], PDO::PARAM_INT);
+        $stmt->bindParam(":champion", $datos['champion'], PDO::PARAM_STR);
+        $stmt->bindParam(":country_champion", $datos['country_champion'], PDO::PARAM_STR);
+        $stmt->bindParam(":result", $datos['result'], PDO::PARAM_STR);
+        $stmt->bindParam(":challenger", $datos['challenger'], PDO::PARAM_STR);
+        $stmt->bindParam(":country_challenger", $datos['country_challenger'], PDO::PARAM_STR);
+        $stmt->bindParam(":gender", $datos['gender'], PDO::PARAM_STR);
+        $stmt->bindParam(":organismo", $datos['organismo'], PDO::PARAM_STR);
+        $stmt->bindParam(":division", $datos['division'], PDO::PARAM_STR);
+        $stmt->bindParam(":title", $datos['title'], PDO::PARAM_STR);
+        $stmt->bindParam(":rounds", $datos['rounds'], PDO::PARAM_INT);
+        $stmt->bindParam(":updated_at", $datos['updated_at'], PDO::PARAM_STR);
+
+        if ($stmt->execute()) {
+            return "ok";
+        } else {
+            print_r(Conexion::conectar()->errorInfo());
+        }
+
+        $stmt = null;
     }
 }

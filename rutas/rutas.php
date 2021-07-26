@@ -179,9 +179,6 @@ if (isset($_GET["page"]) && is_numeric($_GET["page"])) {
                     /*Capturar datos */
                     $datos = array();
                     parse_str(file_get_contents('php://input'), $datos);
-
-
-
                     $borrarCartelera = new ControladorCarteleras();
                     $borrarCartelera->delete(array_filter($arrayRutas)[2], $datos);
                 } else {
@@ -200,6 +197,14 @@ if (isset($_GET["page"]) && is_numeric($_GET["page"])) {
                     $pelea->show(array_filter($arrayRutas)[2]);
                 }
                 /**PETICIONES PUT */
+                elseif (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'PUT') {
+                    /*Capturar datos */
+                    $datos = array();
+                    parse_str(file_get_contents('php://input'), $datos);
+
+                    $editarPelea = new ControladorPeleas();
+                    $editarPelea->update(array_filter($arrayRutas)[2], $datos);
+                }
                 /**PETICIONES DELETE */
             } else {
                 /*Metodo si no pide cursos y no es un numero  */

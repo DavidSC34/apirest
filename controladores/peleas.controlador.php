@@ -127,13 +127,88 @@ class ControladorPeleas
         }
     }
 
-    public function update()
+    public function update($id, $datos)
     {
+        /*Validacion datos */
+        foreach ($datos as $key => $valueDatos) {
+
+            if (isset($valueDatos) && !preg_match('/^[(\\)\\=\\&\\$\\;\\-\\_\\*\\"\\<\\>\\?\\¿\\!\\:\\,\\.\\0-9a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$/', $valueDatos)) {
+                $json = array(
+                    "status" => 404,
+                    "detalle" => "Error en el campo nombre " . $key
+                );
+                echo json_encode($json, true);
+                return;
+            }
+        }
         //verificar si el usuario que actualiza fue el creador de la pelea
+        $pelea = ModeloPeleas::show("cartelera_peleas", $id);
+        foreach ($pelea as $key => $valuePelea) {
+            if ($valuePelea->uid == $datos['uid']) {
+                $datosModelo = array();
+                if ($datos['id_cartelera'] != null && !empty($datos['id_cartelera']) && is_numeric($datos['id_cartelera'])) {
+                    $datosModelo['id_cartelera'] = $datos['id_cartelera'];
+                } else {
+                    $json = array(
+                        "status" => 200,
+                        "total_registros" => 0,
+                        "detalle" => "Error en el id de cartelera, no es numerico o no esta definida"
+                    );
+                    echo json_encode($json, true);
+                    return;
+                }
+
+                if ($datos['rounds'] != null && !empty($datos['rounds']) && is_numeric($datos['rounds']) && $datos['rounds'] <= 12) {
+                    $datosModelo['rounds'] = $datos['rounds'];
+                } else {
+                    $json = array(
+                        "status" => 200,
+                        "total_registros" => 0,
+                        "detalle" => "Error en rounds, no es numerico o no esta definida o es mayor a 12"
+                    );
+                    echo json_encode($json, true);
+                    return;
+                }
+                /*LLevar los datos al modelo */
+                $datosModelo['id'] = $id;
+                $datosModelo['champion'] = $datos['champion'];
+                $datosModelo['country_champion'] = $datos['country_champion'];
+                $datosModelo['result'] = $datos['result'];
+                $datosModelo['challenger'] = $datos['challenger'];
+                $datosModelo['country_challenger'] = $datos['country_challenger'];
+                $datosModelo['gender'] = $datos['gender'];
+                $datosModelo['organismo'] = $datos['organismo'];
+                $datosModelo['division'] = $datos['division'];
+                $datosModelo['title'] = $datos['title'];
+                // $datosModelo['uid'] = $datos['uid'];
+                // $datosModelo['status'] = 1;
+                // $datosModelo['created_at'] = date('Y-m-d h:i:s');
+                $datosModelo['updated_at'] = date('Y-m-d h:i:s');
+
+                $update  = ModeloPeleas::update("cartelera_peleas", $datosModelo);
+
+                /*Respuesta del modelo */
+                if ($update == "ok") {
+                    $json = array(
+                        "status" => 200,
+                        "detalle" => "Operacion exitosa, pelea actualizada"
+                    );
+                    echo json_encode($json, true);
+                    return;
+                }
+            } else {
+                $json = array(
+                    "status" => 404,
+                    "detalle" => "No esta autorizado para modificar esta pelea"
+                );
+                echo json_encode($json, true);
+                return;
+            }
+        }
     }
 
     public function delete()
     {
-        //verificar si el usuario que borrar fue el creador de la pelea
+        //verificar si el usuario que borra fue el creador de la pelea
     }
 }
