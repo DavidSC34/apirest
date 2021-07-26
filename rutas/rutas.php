@@ -19,12 +19,8 @@ if (isset($_GET["page"]) && is_numeric($_GET["page"])) {
     } else {
 
         if (count(array_filter($arrayRutas)) === 1) {
-
-
-
             /*cuando se hacen peticiones de registros*/
             if (array_filter($arrayRutas)[1] == "registro") {
-
 
                 if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
                     //Capturar datos 
@@ -33,9 +29,6 @@ if (isset($_GET["page"]) && is_numeric($_GET["page"])) {
                         "apellido" => $_POST["apellido"],
                         "email" => $_POST["email"]
                     );
-
-
-
                     $registro = new ControladorClientes();
                     $registro->create($datos);
                 } else {
@@ -97,6 +90,12 @@ if (isset($_GET["page"]) && is_numeric($_GET["page"])) {
 
                     $crearCartelera = new ControladorCarteleras();
                     $crearCartelera->create($datos);
+                } else {
+                    $json = array(
+                        "detalle" => "Peticion invalida"
+                    );
+                    echo json_encode($json, true);
+                    return;
                 }
             } elseif (array_filter($arrayRutas)[1] == "peleas") {
 
@@ -106,8 +105,7 @@ if (isset($_GET["page"]) && is_numeric($_GET["page"])) {
                     $peleas = new ControladorPeleas();
                     $peleas->index(null);
                 }
-                /* PETICIONES POST*/
-                if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
+                /* PETICIONES POST*/ elseif (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
                     $datos = array(
                         "id_cartelera" => $_POST['id_cartelera'],
                         "champion" => $_POST['champion'],
@@ -126,6 +124,12 @@ if (isset($_GET["page"]) && is_numeric($_GET["page"])) {
 
                     $crearPelea = new ControladorPeleas();
                     $crearPelea->create($datos);
+                } else {
+                    $json = array(
+                        "detalle" => "Peticion invalida"
+                    );
+                    echo json_encode($json, true);
+                    return;
                 }
             } else {
                 $json = array(
@@ -142,7 +146,8 @@ if (isset($_GET["page"]) && is_numeric($_GET["page"])) {
                     $curso = new ControladorCursos();
                     $curso->show(array_filter($arrayRutas)[2]);
                 }
-                /* PETICIONES PUT*/ elseif (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'PUT') {
+                /** PETICIONES PUT */
+                elseif (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'PUT') {
 
                     /*Capturar datos */
                     $datos = array();
@@ -151,8 +156,8 @@ if (isset($_GET["page"]) && is_numeric($_GET["page"])) {
                     $editarCurso = new ControladorCursos();
                     $editarCurso->update(array_filter($arrayRutas)[2], $datos);
                 }
-
-                /* PETICIONES DELETE*/ elseif (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'DELETE') {
+                /** PETICIONES DELETE */
+                elseif (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'DELETE') {
                     $borrarCurso = new ControladorCursos();
                     $borrarCurso->delete(array_filter($arrayRutas)[2]);
                 } else {
@@ -164,24 +169,30 @@ if (isset($_GET["page"]) && is_numeric($_GET["page"])) {
                     return;
                 }
             } elseif (array_filter($arrayRutas)[1] == "carteleras" && is_numeric(array_filter($arrayRutas)[2])) {
-                /* PETICIONES GET*/
+                /**  PETICIONES GET */
                 if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'GET') {
                     $cartelera = new ControladorCarteleras();
                     $cartelera->show(array_filter($arrayRutas)[2]);
-                } elseif (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'PUT') {
+                }
+                /**  PETICIONES PUT */
+                elseif (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'PUT') {
                     /*Capturar datos */
                     $datos = array();
                     parse_str(file_get_contents('php://input'), $datos);
 
                     $editarCartelera = new ControladorCarteleras();
                     $editarCartelera->update(array_filter($arrayRutas)[2], $datos);
-                } elseif (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'DELETE') {
+                }
+                /**  PETICIONES DELETE */
+                elseif (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'DELETE') {
                     /*Capturar datos */
                     $datos = array();
                     parse_str(file_get_contents('php://input'), $datos);
                     $borrarCartelera = new ControladorCarteleras();
                     $borrarCartelera->delete(array_filter($arrayRutas)[2], $datos);
-                } else {
+                }
+                /**  PETICIONES INVALIDAS */
+                else {
                     /*Metodo no encontrado */
                     $json = array(
                         "detalle" => "no encontrado"
@@ -206,6 +217,22 @@ if (isset($_GET["page"]) && is_numeric($_GET["page"])) {
                     $editarPelea->update(array_filter($arrayRutas)[2], $datos);
                 }
                 /**PETICIONES DELETE */
+                elseif (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'DELETE') {
+                    /*Capturar datos */
+                    $datos = array();
+                    parse_str(file_get_contents('php://input'), $datos);
+                    $borrarPelea = new ControladorPeleas();
+                    $borrarPelea->delete(array_filter($arrayRutas)[2], $datos);
+                }
+                /**METODO NO ENCONTRADO PARA LAS PELEAS */
+                else {
+                    /*Metodo no encontrado */
+                    $json = array(
+                        "detalle" => "no encontrado"
+                    );
+                    echo json_encode($json, true);
+                    return;
+                }
             } else {
                 /*Metodo si no pide cursos y no es un numero  */
                 $json = array(

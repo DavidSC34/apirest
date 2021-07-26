@@ -207,8 +207,46 @@ class ControladorPeleas
         }
     }
 
-    public function delete()
+    public function delete($id, $datos)
     {
-        //verificar si el usuario que borra fue el creador de la pelea
+        //verificar el id sea valido para poder borrar la pelea
+        if ($id != null && is_numeric($id) && $id > 0 && !empty($id)) {
+            //verificar si el usuario que borra fue el creador de la pelea
+            $pelea = ModeloPeleas::show("cartelera_peleas", $id);
+            foreach ($pelea as $key => $valuePelea) {
+                if ($valuePelea->uid == $datos['uid']) {
+                    //llevar los datos al modelo
+                    $datosModelo = array(
+                        'id' => $id,
+                        'status' => 0,
+                        'updated_at' => date('Y-m-d h:i:s')
+                    );
+                    $borrar = ModeloPeleas::delete("cartelera_peleas", $datosModelo);
+                    /*Respuesta del modelo */
+                    if ($borrar == "ok") {
+                        $json = array(
+                            "status" => 200,
+                            "detalle" => "Operacion exitosa, pelea eliminada"
+                        );
+                        echo json_encode($json, true);
+                        return;
+                    }
+                } else {
+                    $json = array(
+                        "status" => 404,
+                        "detalle" => "No esta autorizado para borrar esta pelea"
+                    );
+                    echo json_encode($json, true);
+                    return;
+                }
+            }
+        } else {
+            $json = array(
+                "status" => 404,
+                "detalle" => "Error en id, esta vacio o no es un numero"
+            );
+            echo json_encode($json, true);
+            return;
+        }
     }
 }

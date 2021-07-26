@@ -81,4 +81,20 @@ class ModeloPeleas
 
         $stmt = null;
     }
+    static public function delete($tabla, $datos)
+    {
+        $stmt = Conexion::conectar()->prepare("UPDATE $tabla SET status=:status,updated_at=:updated_at WHERE id=:id");
+
+        $stmt->bindParam(":id", $datos['id'], PDO::PARAM_INT);
+        $stmt->bindParam(":status", $datos['status'], PDO::PARAM_INT);
+        $stmt->bindParam(":updated_at", $datos['updated_at'], PDO::PARAM_STR);
+
+        if ($stmt->execute()) {
+            return "ok";
+        } else {
+            print_r(Conexion::conectar()->errorInfo());
+        }
+
+        $stmt = null;
+    }
 }
