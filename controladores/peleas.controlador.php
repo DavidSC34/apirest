@@ -56,8 +56,37 @@ class ControladorPeleas
         }
     }
 
-    public function peleaPorCartelera()
+    public function showPeleaCartelera($id)
     {
+        //Validar datos
+        if ($id != null && is_numeric($id) && $id > 0 && !empty($id)) {
+            $peleas = ModeloPeleas::showPeleaCartelera("cartelera_peleas", "cartelera", $id);
+            //Verificacion de datos de datos
+            if (!empty($peleas)) {
+                $json = array(
+                    "status" => 200,
+                    "total_registros" => count($peleas),
+                    "detalle" => $peleas
+                );
+                echo json_encode($json, true);
+                return;
+            } else {
+                $json = array(
+                    "status" => 200,
+                    "total_registros" => 0,
+                    "detalle" => "No hay ninguna pelea registrada"
+                );
+                echo json_encode($json, true);
+                return;
+            }
+        } else {
+            $json = array(
+                "status" => 404,
+                "detalle" => "Error en id de cartelera, esta vacio o no es un numero"
+            );
+            echo json_encode($json, true);
+            return;
+        }
     }
 
     public function create($datos)

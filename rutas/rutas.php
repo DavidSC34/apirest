@@ -233,6 +233,24 @@ if (isset($_GET["page"]) && is_numeric($_GET["page"])) {
                     echo json_encode($json, true);
                     return;
                 }
+            }
+            /** PETICIONES DE PELEAS POR CARTELERA */
+            elseif (array_filter($arrayRutas)[1] == "pelea-cartelera" && is_numeric(array_filter($arrayRutas)[2])) {
+                /** PETICIONES GET */
+                if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'GET') {
+
+                    $peleaCartelera = new ControladorPeleas();
+                    $peleaCartelera->showPeleaCartelera(array_filter($arrayRutas)[2]);
+                }
+                /**METODO NO ENCONTRADO PARA LAS PELEAS */
+                else {
+                    /*Metodo no encontrado */
+                    $json = array(
+                        "detalle" => "Peticion no encontrado"
+                    );
+                    echo json_encode($json, true);
+                    return;
+                }
             } else {
                 /*Metodo si no pide cursos y no es un numero  */
                 $json = array(
