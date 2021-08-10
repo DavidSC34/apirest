@@ -59,6 +59,8 @@ class ControladorCarteleras
 
     public function create($datos)
     {
+
+      
         /*Validacion datos */
         foreach ($datos as $key => $valueDatos) {
 

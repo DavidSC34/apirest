@@ -75,17 +75,21 @@ if (isset($_GET["page"]) && is_numeric($_GET["page"])) {
                     $carteleras->index(null);
                 } elseif (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
 
-                    $datos = array(
-                        "date" => $_POST["date"],
-                        "country" => $_POST["country"],
-                        "city" => $_POST["city"],
-                        "state" => $_POST["state"],
-                        "commission" => $_POST["commission"],
-                        "promoter" => $_POST["promoter"],
-                        "place" => $_POST["place"],
-                        "uid" => $_POST["uid"],
-                        "status" => 1,
-                    );
+                     /*Capturar datos */
+                     $datos = array();
+                     $datos = json_decode(file_get_contents('php://input'),true);
+
+                    // $datos = array(
+                    //     "date" => $_POST["date"],
+                    //     "country" => $_POST["country"],
+                    //     "city" => $_POST["city"],
+                    //     "state" => $_POST["state"],
+                    //     "commission" => $_POST["commission"],
+                    //     "promoter" => $_POST["promoter"],
+                    //     "place" => $_POST["place"],
+                    //     "uid" => $_POST["uid"],
+                    //     "status" => 1,
+                    // );
 
 
                     $crearCartelera = new ControladorCarteleras();
