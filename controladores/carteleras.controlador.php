@@ -103,6 +103,7 @@ class ControladorCarteleras
 
     public function update($id, $datos)
     {
+               
 
         /*Validacion datos */
         foreach ($datos as $key => $valueDatos) {
@@ -132,8 +133,7 @@ class ControladorCarteleras
                     "commission" => $datos["commission"],
                     "promoter" => $datos["promoter"],
                     "place" => $datos["place"],
-                    "uid" => $datos["uid"],
-                    "status" => $datos["status"],
+                    "uid" => $datos["uid"],                    
                     "updated_at" => date('Y-m-d h:i:s'),
                 );
 

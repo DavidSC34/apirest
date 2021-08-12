@@ -180,9 +180,9 @@ if (isset($_GET["page"]) && is_numeric($_GET["page"])) {
                 }
                 /**  PETICIONES PUT */
                 elseif (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'PUT') {
-                    /*Capturar datos */
-                    $datos = array();
-                    parse_str(file_get_contents('php://input'), $datos);
+                     /*Capturar datos */
+                     $datos = array();
+                     $datos = json_decode(file_get_contents('php://input'),true);
 
                     $editarCartelera = new ControladorCarteleras();
                     $editarCartelera->update(array_filter($arrayRutas)[2], $datos);
