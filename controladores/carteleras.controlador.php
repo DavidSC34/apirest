@@ -103,10 +103,14 @@ class ControladorCarteleras
 
     public function update($id, $datos)
     {
-
+        // var_dump($datos['usuarioLogeado']['uid']);
+        // var_dump($datos['cartelera']);
+        // return;
+        
+        
 
         /*Validacion datos */
-        foreach ($datos as $key => $valueDatos) {
+        foreach ($datos['cartelera'] as $key => $valueDatos) {
 
             if (isset($valueDatos) && !preg_match('/^[(\\)\\=\\&\\$\\;\\-\\_\\*\\"\\<\\>\\?\\¿\\!\\:\\,\\.\\0-9a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$/', $valueDatos)) {
                 $json = array(
@@ -122,18 +126,18 @@ class ControladorCarteleras
         $cartelera  = ModeloCarteleras::show("cartelera", $id);
 
         foreach ($cartelera as $key => $valueCartelera) {
-            if ($valueCartelera->uid == $datos['uid']) {
+            if ($valueCartelera->uid == $datos['usuarioLogeado']['uid']) {
                 /*Llevar datos al modelo*/
                 $datos = array(
                     "id" => $id,
-                    "date" => $datos["date"],
-                    "country" => $datos["country"],
-                    "city" => $datos["city"],
-                    "state" => $datos["state"],
-                    "commission" => $datos["commission"],
-                    "promoter" => $datos["promoter"],
-                    "place" => $datos["place"],
-                    "uid" => $datos["uid"],
+                    "date" => $datos['cartelera']["date"],
+                    "country" => $datos['cartelera']["country"],
+                    "city" => $datos['cartelera']["city"],
+                    "state" => $datos['cartelera']["state"],
+                    "commission" => $datos['cartelera']["commission"],
+                    "promoter" => $datos['cartelera']["promoter"],
+                    "place" => $datos['cartelera']["place"],
+                    "uid" => $datos['cartelera']["uid"],
                     "updated_at" => date('Y-m-d h:i:s'),
                 );
 
@@ -161,14 +165,17 @@ class ControladorCarteleras
 
     public function delete($id, $datos)
     {
-
+         // var_dump($datos['usuarioLogeado']['uid']);
+        // var_dump($datos['cartelera']);
+        // return;
+        
 
         /* validar el id creador*/
         $cartelera  = ModeloCarteleras::show("cartelera", $id);
 
         foreach ($cartelera as $key => $valueCartelera) {
 
-            if ($valueCartelera->uid == $datos['uid'] && ($valueCartelera->uid !== " ")) {
+            if ($valueCartelera->uid == $datos['usuarioLogeado']['uid'] && ($valueCartelera->uid !== " ")) {
                 /*Llevar datos al modelo*/
                 $datos = array(
                     "id" => $id,

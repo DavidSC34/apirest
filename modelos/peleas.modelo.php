@@ -25,7 +25,7 @@ class ModeloPeleas
 
     static public function showPeleaCartelera($tabla, $tabla2, $id)
     {
-        $stmt = Conexion::conectar()->prepare(" SELECT $tabla.id, $tabla.id_cartelera, $tabla.champion, $tabla.country_champion, $tabla.result, $tabla.challenger, $tabla.country_challenger, $tabla.gender, $tabla.organismo, $tabla.division, $tabla.title, $tabla.rounds, $tabla.status, $tabla.uid, $tabla.created_at, $tabla.updated_at, $tabla2.date, $tabla2.country, $tabla2.city, $tabla2.state,$tabla2.commission FROM $tabla INNER JOIN $tabla2 ON $tabla.id_cartelera = $tabla2.id_cartelera WHERE $tabla.id_cartelera=:id");
+        $stmt = Conexion::conectar()->prepare(" SELECT $tabla.id, $tabla.id_cartelera, $tabla.champion, $tabla.country_champion, $tabla.result, $tabla.challenger, $tabla.country_challenger, $tabla.gender, $tabla.organismo, $tabla.division, $tabla.title, $tabla.rounds, $tabla.status, $tabla.uid, $tabla.created_at, $tabla.updated_at, $tabla2.date, $tabla2.country, $tabla2.city, $tabla2.state,$tabla2.commission, $tabla2.uid as uid_cartelera FROM $tabla INNER JOIN $tabla2 ON $tabla.id_cartelera = $tabla2.id_cartelera WHERE $tabla.id_cartelera=:id");
         $stmt->bindParam(":id", $id, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_CLASS);
