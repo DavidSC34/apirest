@@ -105,7 +105,7 @@ class ControladorPeleas
         }
         $datosModelo = array();
         if ($datos['id_cartelera'] != null && !empty($datos['id_cartelera']) && is_numeric($datos['id_cartelera'])) {
-            $datosModelo['id_cartelera'] = $datos['id_cartelera'];
+            $datosModelo['id_cartelera'] = intval($datos['id_cartelera']);
         } else {
             $json = array(
                 "status" => 200,
@@ -117,7 +117,7 @@ class ControladorPeleas
         }
 
         if ($datos['rounds'] != null && !empty($datos['rounds']) && is_numeric($datos['rounds']) && $datos['rounds'] <= 12) {
-            $datosModelo['rounds'] = $datos['rounds'];
+            $datosModelo['rounds'] = intval($datos['rounds']);
         } else {
             $json = array(
                 "status" => 200,
@@ -173,10 +173,10 @@ class ControladorPeleas
         //verificar si el usuario que actualiza fue el creador de la pelea
         $pelea = ModeloPeleas::show("cartelera_peleas", $id);
         foreach ($pelea as $key => $valuePelea) {
-            if ($valuePelea->uid == $datos['uid']) {
+            if ($valuePelea->uid == $datos['uid']  && ($valuePelea->uid !== " " || !empty($valuePelea->uid))) {
                 $datosModelo = array();
                 if ($datos['id_cartelera'] != null && !empty($datos['id_cartelera']) && is_numeric($datos['id_cartelera'])) {
-                    $datosModelo['id_cartelera'] = $datos['id_cartelera'];
+                    $datosModelo['id_cartelera'] = intval($datos['id_cartelera']);
                 } else {
                     $json = array(
                         "status" => 200,
@@ -188,7 +188,7 @@ class ControladorPeleas
                 }
 
                 if ($datos['rounds'] != null && !empty($datos['rounds']) && is_numeric($datos['rounds']) && $datos['rounds'] <= 12) {
-                    $datosModelo['rounds'] = $datos['rounds'];
+                    $datosModelo['rounds'] = intval($datos['rounds']);
                 } else {
                     $json = array(
                         "status" => 200,

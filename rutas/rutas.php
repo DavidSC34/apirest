@@ -75,9 +75,9 @@ if (isset($_GET["page"]) && is_numeric($_GET["page"])) {
                     $carteleras->index(null);
                 } elseif (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
 
-                     /*Capturar datos */
-                     $datos = array();
-                     $datos = json_decode(file_get_contents('php://input'),true);
+                    /*Capturar datos */
+                    $datos = array();
+                    $datos = json_decode(file_get_contents('php://input'), true);
 
                     // $datos = array(
                     //     "date" => $_POST["date"],
@@ -110,21 +110,24 @@ if (isset($_GET["page"]) && is_numeric($_GET["page"])) {
                     $peleas->index(null);
                 }
                 /* PETICIONES POST*/ elseif (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
-                    $datos = array(
-                        "id_cartelera" => $_POST['id_cartelera'],
-                        "champion" => $_POST['champion'],
-                        "country_champion" => $_POST['country_champion'],
-                        "result" => $_POST['result'],
-                        "challenger" => $_POST['challenger'],
-                        "country_challenger" => $_POST['country_challenger'],
-                        "gender" => $_POST['gender'],
-                        "organismo" => $_POST['organismo'],
-                        "division" => $_POST['division'],
-                        "title" => $_POST['title'],
-                        "rounds" => $_POST['rounds'],
-                        "uid" => $_POST['uid'],
+                    /*Capturar datos */
+                    $datos = array();
+                    $datos = json_decode(file_get_contents('php://input'), true);
+                    // $datos = array(
+                    //     "id_cartelera" => $_POST['id_cartelera'],
+                    //     "champion" => $_POST['champion'],
+                    //     "country_champion" => $_POST['country_champion'],
+                    //     "result" => $_POST['result'],
+                    //     "challenger" => $_POST['challenger'],
+                    //     "country_challenger" => $_POST['country_challenger'],
+                    //     "gender" => $_POST['gender'],
+                    //     "organismo" => $_POST['organismo'],
+                    //     "division" => $_POST['division'],
+                    //     "title" => $_POST['title'],
+                    //     "rounds" => $_POST['rounds'],
+                    //     "uid" => $_POST['uid'],
 
-                    );
+                    // );
 
                     $crearPelea = new ControladorPeleas();
                     $crearPelea->create($datos);
@@ -180,9 +183,9 @@ if (isset($_GET["page"]) && is_numeric($_GET["page"])) {
                 }
                 /**  PETICIONES PUT */
                 elseif (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'PUT') {
-                     /*Capturar datos */
-                     $datos = array();
-                     $datos = json_decode(file_get_contents('php://input'),true);
+                    /*Capturar datos */
+                    $datos = array();
+                    $datos = json_decode(file_get_contents('php://input'), true);
 
                     $editarCartelera = new ControladorCarteleras();
                     $editarCartelera->update(array_filter($arrayRutas)[2], $datos);
@@ -191,7 +194,7 @@ if (isset($_GET["page"]) && is_numeric($_GET["page"])) {
                 elseif (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'DELETE') {
                     /*Capturar datos */
                     $datos = array();
-                    parse_str(file_get_contents('php://input'), $datos);
+                    $datos = json_decode(file_get_contents('php://input'), true);
                     $borrarCartelera = new ControladorCarteleras();
                     $borrarCartelera->delete(array_filter($arrayRutas)[2], $datos);
                 }
@@ -213,18 +216,20 @@ if (isset($_GET["page"]) && is_numeric($_GET["page"])) {
                 }
                 /**PETICIONES PUT */
                 elseif (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'PUT') {
+
                     /*Capturar datos */
                     $datos = array();
-                    parse_str(file_get_contents('php://input'), $datos);
+                    $datos = json_decode(file_get_contents('php://input'), true);
 
                     $editarPelea = new ControladorPeleas();
                     $editarPelea->update(array_filter($arrayRutas)[2], $datos);
                 }
                 /**PETICIONES DELETE */
                 elseif (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'DELETE') {
+
                     /*Capturar datos */
                     $datos = array();
-                    parse_str(file_get_contents('php://input'), $datos);
+                    $datos = json_decode(file_get_contents('php://input'), true);
                     $borrarPelea = new ControladorPeleas();
                     $borrarPelea->delete(array_filter($arrayRutas)[2], $datos);
                 }

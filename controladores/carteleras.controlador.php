@@ -60,7 +60,7 @@ class ControladorCarteleras
     public function create($datos)
     {
 
-      
+
         /*Validacion datos */
         foreach ($datos as $key => $valueDatos) {
 
@@ -103,7 +103,7 @@ class ControladorCarteleras
 
     public function update($id, $datos)
     {
-               
+
 
         /*Validacion datos */
         foreach ($datos as $key => $valueDatos) {
@@ -133,7 +133,7 @@ class ControladorCarteleras
                     "commission" => $datos["commission"],
                     "promoter" => $datos["promoter"],
                     "place" => $datos["place"],
-                    "uid" => $datos["uid"],                    
+                    "uid" => $datos["uid"],
                     "updated_at" => date('Y-m-d h:i:s'),
                 );
 
@@ -168,7 +168,7 @@ class ControladorCarteleras
 
         foreach ($cartelera as $key => $valueCartelera) {
 
-            if ($valueCartelera->uid == $datos['uid']) {
+            if ($valueCartelera->uid == $datos['uid'] && ($valueCartelera->uid !== " ")) {
                 /*Llevar datos al modelo*/
                 $datos = array(
                     "id" => $id,
