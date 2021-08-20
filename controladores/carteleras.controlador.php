@@ -179,7 +179,7 @@ class ControladorCarteleras
                 /*Llevar datos al modelo*/
                 $datos = array(
                     "id" => $id,
-                    "updated_at" => date('Y-m-d h:i:s'),
+                    "updated_at" => date('Y-m-d h:i:s'),  
                 );
 
                 $delete  = ModeloCarteleras::delete("cartelera", $datos);
