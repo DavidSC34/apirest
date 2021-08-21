@@ -42,6 +42,7 @@ class ControladorCarteleras
         if (!empty($cartelera)) {
             $json = array(
                 "status" => 200,
+                "total_registros" => count($cartelera),
                 "detalle" => $cartelera
             );
             echo json_encode($json, true);
@@ -106,8 +107,8 @@ class ControladorCarteleras
         // var_dump($datos['usuarioLogeado']['uid']);
         // var_dump($datos['cartelera']);
         // return;
-        
-        
+
+
 
         /*Validacion datos */
         foreach ($datos['cartelera'] as $key => $valueDatos) {
@@ -165,10 +166,10 @@ class ControladorCarteleras
 
     public function delete($id, $datos)
     {
-         // var_dump($datos['usuarioLogeado']['uid']);
+        // var_dump($datos['usuarioLogeado']['uid']);
         // var_dump($datos['cartelera']);
         // return;
-        
+
 
         /* validar el id creador*/
         $cartelera  = ModeloCarteleras::show("cartelera", $id);
@@ -179,7 +180,7 @@ class ControladorCarteleras
                 /*Llevar datos al modelo*/
                 $datos = array(
                     "id" => $id,
-                    "updated_at" => date('Y-m-d h:i:s'),  
+                    "updated_at" => date('Y-m-d h:i:s'),
                 );
 
                 $delete  = ModeloCarteleras::delete("cartelera", $datos);
